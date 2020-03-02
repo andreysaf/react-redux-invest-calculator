@@ -1,14 +1,15 @@
-import React from 'react';
-import { Counter } from './features/counter/Counter';
-import Invest  from './features/investCalc/Invest';
-import './App.css';
+import React from "react";
+import { Counter } from "./features/counter/Counter";
+import { Container } from "semantic-ui-react";
+import Invest from "./features/investCalc/Invest";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Invest />
-      </header>
+    <div className="AppContainer">
+        <Container>
+          <Invest />
+        </Container>
     </div>
   );
 }
