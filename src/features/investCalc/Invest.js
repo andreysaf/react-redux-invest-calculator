@@ -1,8 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Form, Button, Radio, Input, Label } from "semantic-ui-react";
 
 const Invest = () => {
+  const [startAmount, setStartAmount] = useState(0);
+  const [startAmountError, setStartAmountError] = useState(false);
+
+  const [years, setYears] = useState(0);
+  const [yearsError, setYearsError] = useState(0);
+
+  const [returnRate, setReturnRate] = useState(0);
+  const [returnRateError, setReturnRateError] = useState(0);
+
+  const [contribution, setContribution] = useState(0);
+  const [contributionError, setContributionError] = useState(0);
+
   const [contributionFrq, setContributionFrq] = useState("week");
+
+  const calculateInvestment = () => {};
+
+  useEffect(() => {
+    console.log(startAmount);
+  }, [startAmount]);
 
   return (
     <div>
@@ -14,7 +32,21 @@ const Invest = () => {
           <Form>
             <Form.Field>
               <label>Starting amount</label>
-              <Input labelPosition="right" type="text" placeholder="Amount">
+              <Input
+                labelPosition="right"
+                type="text"
+                placeholder="Amount"
+                value={startAmount}
+                error={startAmountError}
+                onChange={(e, { name, value }) => {
+                  if (!isNaN(value) || value > 0) {
+                    setStartAmount(value);
+                    setStartAmountError(false);
+                  } else {
+                    setStartAmountError(true);
+                  }
+                }}
+              >
                 <Label basic>$</Label>
                 <input />
                 <Label>.00</Label>
