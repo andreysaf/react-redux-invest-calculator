@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, Form, Button, Radio, Input, Label, Message, Icon } from "semantic-ui-react";
+import {
+  Card,
+  Form,
+  Button,
+  Radio,
+  Input,
+  Label,
+  Message,
+  Icon
+} from "semantic-ui-react";
 
 const Invest = () => {
   const [startAmount, setStartAmount] = useState(0);
@@ -20,10 +29,34 @@ const Invest = () => {
 
   const calculateInvestment = () => {
     let amount = 0;
-    amount = startAmount*(1+(returnRate/100*years));
+    let P = startAmount;
+    let PMT = contribution;
+    let r = returnRate;
+    let n = (contributionFrq === 'month' ? 12 : 24);
+    let t = years;
+
+    console.log(PMT);
+
+    if (PMT === 0 || PMT === '') {
+      amount = startAmount*(1+(returnRate/100*years));
+    } else {
+      var A = P * Math.pow(1 + r / 100 / n, n * t);
+      var S = PMT * ((Math.pow(1 + r / 100 / n, n * t) - 1) / (r / 100 / n));
+      amount = (A + S).toFixed(2);
+    }
+
     if (!!isNaN(amount) || amount >= 0) {
       setInvestAmount(amount);
     }
+
+    // document.getElementById("id01").innerHTML = (A + S).toFixed(2);
+    // document.getElementById("id02").innerHTML = (PMT * t * 12).toFixed(2);
+    // document.getElementById("id03").innerHTML = (A - P).toFixed(2);
+    // document.getElementById("id04").innerHTML = (S - PMT * t * 12).toFixed(2);
+    // document.getElementById("id05").innerHTML = (
+    //   ((A - P + (S - PMT * t * 12)) / (A + S)) *
+    //   100
+    // ).toFixed(2);
   };
 
   useEffect(() => {
@@ -37,7 +70,7 @@ const Invest = () => {
           <Card.Header>Investment Calculator</Card.Header>
         </Card.Content>
         <Card.Content extra>
-        <Message attached="bottom" success>
+          <Message attached="bottom" success>
             <Icon name="dollar" />
             You will have ${investAmount} within {years} years.
           </Message>
@@ -155,7 +188,6 @@ const Invest = () => {
           </Form>
         </Card.Content>
       </Card>
-
     </div>
   );
 };
