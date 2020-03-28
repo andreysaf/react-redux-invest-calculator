@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Card,
   Form,
-  Button,
+  List,
   Radio,
   Input,
   Label,
@@ -32,31 +32,22 @@ const Invest = () => {
     let P = startAmount;
     let PMT = contribution;
     let r = returnRate;
-    let n = (contributionFrq === 'month' ? 12 : 24);
+    let n = contributionFrq === "month" ? 12 : 24;
     let t = years;
 
-    console.log(PMT);
-
-    if (PMT === 0 || PMT === '') {
-      amount = startAmount*(1+(returnRate/100*years));
+    if (PMT === 0 || PMT === "") {
+      amount = startAmount * (1 + (returnRate / 100) * years);
+    } else if (r === 0 || r === '') {
+      amount = parseInt(P) + parseInt(PMT * n * t);
     } else {
       var A = P * Math.pow(1 + r / 100 / n, n * t);
       var S = PMT * ((Math.pow(1 + r / 100 / n, n * t) - 1) / (r / 100 / n));
-      amount = (A + S).toFixed(2);
+      amount = Number((A + S).toFixed(2));
     }
 
-    if (!!isNaN(amount) || amount >= 0) {
+    if (!isNaN(amount) || amount >= 0) {
       setInvestAmount(amount);
     }
-
-    // document.getElementById("id01").innerHTML = (A + S).toFixed(2);
-    // document.getElementById("id02").innerHTML = (PMT * t * 12).toFixed(2);
-    // document.getElementById("id03").innerHTML = (A - P).toFixed(2);
-    // document.getElementById("id04").innerHTML = (S - PMT * t * 12).toFixed(2);
-    // document.getElementById("id05").innerHTML = (
-    //   ((A - P + (S - PMT * t * 12)) / (A + S)) *
-    //   100
-    // ).toFixed(2);
   };
 
   useEffect(() => {
@@ -70,10 +61,6 @@ const Invest = () => {
           <Card.Header>Investment Calculator</Card.Header>
         </Card.Content>
         <Card.Content extra>
-          <Message attached="bottom" success>
-            <Icon name="dollar" />
-            You will have ${investAmount} within {years} years.
-          </Message>
           <Form className="attached">
             <Form.Field>
               <label>Starting amount</label>
@@ -186,6 +173,17 @@ const Invest = () => {
               />
             </Form.Field>
           </Form>
+        </Card.Content>
+        <Card.Content>
+          <Card.Header>Final Amount</Card.Header>
+          <div>
+            You will have {" "}<b>
+            {investAmount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD"
+            })}{" "}</b>
+            in {years} years.
+          </div>
         </Card.Content>
       </Card>
     </div>
