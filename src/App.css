@@ -1,3 +1,15 @@
-.AppContainer{
+.AppContainer {
   padding-top:2em;
+}
+
+.CalcContainer {
+  display: flex!important;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+@media only screen and (max-width: 600px) {
+  .CalcContainer {
+    flex-direction: column;
+  }
 }

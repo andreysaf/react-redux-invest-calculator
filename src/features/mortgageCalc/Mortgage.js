@@ -6,7 +6,7 @@ import {
   Input,
   Label,
 } from "semantic-ui-react";
-import styles from './Invest.module.css';
+import styles from './Mortgage.module.css';
 
 const Invest = () => {
   const [startAmount, setStartAmount] = useState(0);
@@ -21,16 +21,16 @@ const Invest = () => {
   const [contribution, setContribution] = useState(0);
   const [contributionError, setContributionError] = useState(false);
 
-  const [contributionFrq, setContributionFrq] = useState("week");
+  const [contributionFrq, setContributionFrq] = useState("weekly");
 
   const [investAmount, setInvestAmount] = useState(0);
 
-  const calculateInvestment = () => {
+  const calculateMortgage = () => {
     let amount = 0;
     let P = startAmount;
     let PMT = contribution;
     let r = returnRate;
-    let n = contributionFrq === "month" ? 12 : 24;
+    let n = contributionFrq === "monthly" ? 12 : 24;
     let t = years;
 
     if (PMT === 0 || PMT === "") {
@@ -49,19 +49,19 @@ const Invest = () => {
   };
 
   useEffect(() => {
-    calculateInvestment();
+    calculateMortgage();
   }, [startAmount, years, returnRate, contribution, contributionFrq]);
 
   return (
     <div className={styles.calculator}>
       <Card>
         <Card.Content>
-          <Card.Header>Investment Calculator</Card.Header>
+          <Card.Header>Mortgage Calculator</Card.Header>
         </Card.Content>
         <Card.Content extra>
           <Form className="attached">
             <Form.Field>
-              <label>Starting amount</label>
+              <label>Mortgage amount</label>
               <Input
                 labelPosition="right"
                 type="text"
@@ -83,7 +83,7 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              <label>After (in years)</label>
+              <label>Starting mortgage length (in years)</label>
               <Input
                 type="text"
                 placeholder="Years"
@@ -102,7 +102,7 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              <label>Return rate</label>
+              <label>Interest rate</label>
               <Input
                 labelPosition="right"
                 type="text"
@@ -124,7 +124,7 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              <label>Additional contribution</label>
+              <label>Additional contribution (lump sum)</label>
               <Input
                 labelPosition="right"
                 type="text"
@@ -146,34 +146,34 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              Contribute at the end of each: <b>{contributionFrq}</b>
+              Payment Frequency: <b>{contributionFrq}</b>
             </Form.Field>
             <Form.Field>
               <Radio
-                label="Week"
+                label="Weekly"
                 name="contributionRadioGroup"
-                value="week"
-                checked={contributionFrq === "week"}
+                value="weekly"
+                checked={contributionFrq === "weekly"}
                 onChange={() => {
-                  setContributionFrq("week");
+                  setContributionFrq("weekly");
                 }}
               />
             </Form.Field>
             <Form.Field>
               <Radio
-                label="Month"
+                label="Monthly"
                 name="contributionRadioGroup"
-                value="month"
-                checked={contributionFrq === "month"}
+                value="monthly"
+                checked={contributionFrq === "monthly"}
                 onChange={() => {
-                  setContributionFrq("month");
+                  setContributionFrq("monthly");
                 }}
               />
             </Form.Field>
           </Form>
         </Card.Content>
         <Card.Content className={styles.bottom}>
-          <Card.Header>Final Amount</Card.Header>
+          <Card.Header>Payments</Card.Header>
           <div>
             You will have {" "}<b>
             {investAmount.toLocaleString("en-US", {
