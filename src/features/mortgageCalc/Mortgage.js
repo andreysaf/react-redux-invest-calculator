@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  Form,
-  Radio,
-  Input,
-  Label,
-} from "semantic-ui-react";
-import styles from './Mortgage.module.css';
+import { useDispatch } from "react-redux";
+import { storeValues } from './mortgageSlice';
+import { Card, Form, Radio, Input, Label, Button } from "semantic-ui-react";
+import styles from "./Mortgage.module.css";
 
 const Invest = () => {
+  // local state
   const [startAmount, setStartAmount] = useState(0);
   const [startAmountError, setStartAmountError] = useState(false);
 
@@ -25,17 +22,26 @@ const Invest = () => {
 
   const [mortgageAmount, setMortgageAmount] = useState(0);
 
+  const dispatch = useDispatch();
+
   const calculateMortgage = () => {
-    let r = returnRate/100/12;
+    let r = returnRate / 100 / 12;
     let p = startAmount - contribution;
     let n = 12;
     n = n * years;
-    let amount = p*((r*Math.pow((1+r),n))/(Math.pow((1+r), n)-1));
+    let amount = p * ((r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
     if (!isNaN(amount) || amount >= 0) {
-      amount = contributionFrq === "month" ? amount : amount/4;
+      amount = contributionFrq === "month" ? amount : amount / 4;
       setMortgageAmount(amount);
     }
   };
+
+  const compareWithInvestments = () => {
+    dispatch(storeValues({ paymentAmount: Number(mortgageAmount) || 0, 
+      frq: contributionFrq === "month" ? 12 : 48,  
+      startAmount : Number(startAmount) || 0,
+      years : Number(years) || 0 }));
+  }
 
   useEffect(() => {
     calculateMortgage();
@@ -164,13 +170,20 @@ const Invest = () => {
         <Card.Content className={styles.bottom}>
           <Card.Header>Payments</Card.Header>
           <div>
-            Your payment {" "}<b>
-            {mortgageAmount.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD"
-            })}{" "}</b>
+            Your payment{" "}
+            <b>
+              {mortgageAmount.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}{" "}
+            </b>
             every {contributionFrq}.
           </div>
+        </Card.Content>
+        <Card.Content extra>
+          <Button basic color="green" onClick={compareWithInvestments}>
+            Compare to investments
+          </Button>
         </Card.Content>
       </Card>
     </div>
