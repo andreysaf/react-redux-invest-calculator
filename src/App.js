@@ -9,6 +9,7 @@ function App() {
     <div className="AppContainer">
         <Container className="CalcContainer">
           <Invest />
+          <Mortgage />
         </Container>
     </div>
   );

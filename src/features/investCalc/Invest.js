@@ -30,7 +30,7 @@ const Invest = () => {
     let P = startAmount;
     let PMT = contribution;
     let r = returnRate;
-    let n = contributionFrq === "month" ? 12 : 24;
+    let n = contributionFrq === "month" ? 12 : 48;
     let t = years;
 
     if (PMT === 0 || PMT === "") {

@@ -21,30 +21,19 @@ const Invest = () => {
   const [contribution, setContribution] = useState(0);
   const [contributionError, setContributionError] = useState(false);
 
-  const [contributionFrq, setContributionFrq] = useState("weekly");
+  const [contributionFrq, setContributionFrq] = useState("week");
 
-  const [investAmount, setInvestAmount] = useState(0);
+  const [mortgageAmount, setMortgageAmount] = useState(0);
 
   const calculateMortgage = () => {
-    let amount = 0;
-    let P = startAmount;
-    let PMT = contribution;
-    let r = returnRate;
-    let n = contributionFrq === "monthly" ? 12 : 24;
-    let t = years;
-
-    if (PMT === 0 || PMT === "") {
-      amount = startAmount * (1 + (returnRate / 100) * years);
-    } else if (r === 0 || r === '') {
-      amount = parseInt(P) + parseInt(PMT * n * t);
-    } else {
-      var A = P * Math.pow(1 + r / 100 / n, n * t);
-      var S = PMT * ((Math.pow(1 + r / 100 / n, n * t) - 1) / (r / 100 / n));
-      amount = Number((A + S).toFixed(2));
-    }
-
+    let r = returnRate/100/12;
+    let p = startAmount - contribution;
+    let n = 12;
+    n = n * years;
+    let amount = p*((r*Math.pow((1+r),n))/(Math.pow((1+r), n)-1));
     if (!isNaN(amount) || amount >= 0) {
-      setInvestAmount(amount);
+      amount = contributionFrq === "month" ? amount : amount/4;
+      setMortgageAmount(amount);
     }
   };
 
@@ -83,7 +72,7 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              <label>Starting mortgage length (in years)</label>
+              <label>Mortgage length (in years)</label>
               <Input
                 type="text"
                 placeholder="Years"
@@ -124,7 +113,7 @@ const Invest = () => {
               </Input>
             </Form.Field>
             <Form.Field>
-              <label>Additional contribution (lump sum)</label>
+              <label>Down Payment</label>
               <Input
                 labelPosition="right"
                 type="text"
@@ -152,10 +141,10 @@ const Invest = () => {
               <Radio
                 label="Weekly"
                 name="contributionRadioGroup"
-                value="weekly"
-                checked={contributionFrq === "weekly"}
+                value="week"
+                checked={contributionFrq === "week"}
                 onChange={() => {
-                  setContributionFrq("weekly");
+                  setContributionFrq("week");
                 }}
               />
             </Form.Field>
@@ -163,10 +152,10 @@ const Invest = () => {
               <Radio
                 label="Monthly"
                 name="contributionRadioGroup"
-                value="monthly"
-                checked={contributionFrq === "monthly"}
+                value="month"
+                checked={contributionFrq === "month"}
                 onChange={() => {
-                  setContributionFrq("monthly");
+                  setContributionFrq("month");
                 }}
               />
             </Form.Field>
@@ -175,12 +164,12 @@ const Invest = () => {
         <Card.Content className={styles.bottom}>
           <Card.Header>Payments</Card.Header>
           <div>
-            You will have {" "}<b>
-            {investAmount.toLocaleString("en-US", {
+            Your payment {" "}<b>
+            {mortgageAmount.toLocaleString("en-US", {
               style: "currency",
               currency: "USD"
             })}{" "}</b>
-            in {years} years.
+            every {contributionFrq}.
           </div>
         </Card.Content>
       </Card>
