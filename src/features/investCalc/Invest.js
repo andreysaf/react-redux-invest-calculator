@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
+import {
+  selectPaymentAmount,
+  selectFrq,
+  selectStartAmount,
+  selectYears
+} from '../mortgageCalc/mortgageSlice';
 import {
   Card,
   Form,
@@ -11,19 +18,19 @@ import styles from './Invest.module.css';
 const Invest = () => {
   const [startAmount, setStartAmount] = useState(0);
   const [startAmountError, setStartAmountError] = useState(false);
-
   const [years, setYears] = useState(0);
   const [yearsError, setYearsError] = useState(false);
-
   const [returnRate, setReturnRate] = useState(0);
   const [returnRateError, setReturnRateError] = useState(false);
-
   const [contribution, setContribution] = useState(0);
   const [contributionError, setContributionError] = useState(false);
-
   const [contributionFrq, setContributionFrq] = useState("week");
-
   const [investAmount, setInvestAmount] = useState(0);
+
+  const mortgageAmount = useSelector(selectPaymentAmount);
+  const mortgageYears = useSelector(selectYears); 
+  const mortgageFrq = useSelector(selectFrq); 
+  const mortgageStartAmount = useSelector(selectStartAmount);
 
   const calculateInvestment = () => {
     let amount = 0;
@@ -47,6 +54,19 @@ const Invest = () => {
       setInvestAmount(amount);
     }
   };
+
+  // prepop amounts from mortgage
+  useEffect(() => {
+    setStartAmount(mortgageStartAmount);
+    setYears(mortgageYears);
+    setContribution(Math.round(mortgageAmount, 0));
+    if (mortgageFrq === 12){
+      setContributionFrq("month");
+    } else {
+      setContributionFrq("week");
+    }
+    setReturnRate(6);
+  }, [mortgageAmount, mortgageStartAmount, mortgageYears, mortgageFrq]);
 
   useEffect(() => {
     calculateInvestment();

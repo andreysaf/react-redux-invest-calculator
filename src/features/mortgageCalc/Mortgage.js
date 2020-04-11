@@ -39,7 +39,7 @@ const Invest = () => {
   const compareWithInvestments = () => {
     dispatch(storeValues({ paymentAmount: Number(mortgageAmount) || 0, 
       frq: contributionFrq === "month" ? 12 : 48,  
-      startAmount : Number(startAmount) || 0,
+      startAmount : Number(contribution) || 0,
       years : Number(years) || 0 }));
   }
 
@@ -170,7 +170,7 @@ const Invest = () => {
         <Card.Content className={styles.bottom}>
           <Card.Header>Payments</Card.Header>
           <div>
-            Your payment{" "}
+            Your payment is{" "}
             <b>
               {mortgageAmount.toLocaleString("en-US", {
                 style: "currency",

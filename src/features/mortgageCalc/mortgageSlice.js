@@ -10,7 +10,6 @@ export const slice = createSlice({
   },
   reducers: {
     storeValues: (state, action) => {
-        console.log(action);
       state.paymentAmount = action.payload.paymentAmount;
       state.frq = action.payload.frq;
       state.startAmount = action.payload.startAmount;
@@ -26,3 +25,4 @@ export const selectYears = state => state.mortgage.years;
 export const { storeValues } = slice.actions;
 
 export default slice.reducer;
+
